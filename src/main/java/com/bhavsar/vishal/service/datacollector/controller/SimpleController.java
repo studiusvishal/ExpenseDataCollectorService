@@ -5,16 +5,28 @@ import com.bhavsar.vishal.service.datacollector.repository.ExpenseRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Log4j2
 @RestController
 public class SimpleController {
     @Autowired
     private ExpenseRepository expenseRepository;
+
+    @GetMapping("/getRecord")
+    public ResponseEntity<?> getRecord(@RequestParam(value = "id") final Long id){
+        final Optional<ExpenseRecord> optionalExpenseRecord = expenseRepository.findById(id);
+        if (optionalExpenseRecord.isPresent()) {
+            return ResponseEntity.ok(optionalExpenseRecord.get());
+        } else {
+            return ResponseEntity.badRequest().body("No record with specified id " + id + " found");
+        }
+    }
 
     @GetMapping("/getAllRecords")
     public List<ExpenseRecord> getAllRecords() {
@@ -29,5 +41,17 @@ public class SimpleController {
         final ExpenseRecord savedRecord = expenseRepository.save(expenseRecord);
         log.debug("Saved record: {}", savedRecord);
         return savedRecord;
+    }
+
+    @DeleteMapping(value = "/deleteRecord")
+    public ResponseEntity<?> deleteRecord(@RequestParam(value="id") Long id) {
+        expenseRepository.deleteById(id);
+        return ResponseEntity.ok("Record with id "+ id + " deleted successfully");
+    }
+
+    @DeleteMapping(value = "/deleteAllRecords")
+    public ResponseEntity<?> deleteAllRecords() {
+        expenseRepository.deleteAll();
+        return ResponseEntity.ok("All records deleted successfully");
     }
 }
