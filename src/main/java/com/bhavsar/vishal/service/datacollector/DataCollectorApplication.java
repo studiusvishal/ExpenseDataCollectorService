@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @EnableJpaRepositories(basePackages = "com.bhavsar.vishal.service.datacollector")
 @Log4j2
 public class DataCollectorApplication {
-
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         SpringApplication.run(DataCollectorApplication.class, args);
     }
-
 }

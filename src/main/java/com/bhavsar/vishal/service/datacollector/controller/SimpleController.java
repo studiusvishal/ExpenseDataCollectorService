@@ -4,11 +4,9 @@ import com.bhavsar.vishal.service.datacollector.model.ExpenseRecord;
 import com.bhavsar.vishal.service.datacollector.repository.ExpenseRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,7 +42,7 @@ public class SimpleController {
     }
 
     @DeleteMapping(value = "/deleteRecord")
-    public ResponseEntity<?> deleteRecord(@RequestParam(value="id") Long id) {
+    public ResponseEntity<?> deleteRecord(@RequestParam(value="id") final Long id) {
         expenseRepository.deleteById(id);
         return ResponseEntity.ok("Record with id "+ id + " deleted successfully");
     }

@@ -5,6 +5,21 @@
 * Install pgadmin GUI tool to connect to postgresql server
 * Create new user to access postgresql server
 
+* Install postman windows app
+* Register new user - 
+  * http://localhost:8080/users/signup
+  * Request Type: POST
+  * Header: Content-Type = application/json
+  * Body:
+    ```
+    {
+        "username": "admin",
+        "password": "admin",
+        "id": 1
+    }
+    ```
+  * AuthToken will be present in the headers of response. Use it in the header of further requests.
+
 ### Reference Documentation
 For further reference, please consider the following sections:
 
@@ -20,4 +35,5 @@ The following guides illustrate how to use some features concretely:
 * [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
 * [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
 * [Building REST services with Spring](https://spring.io/guides/tutorials/bookmarks/)
-
+* [Json Web Token: How to Secure a Spring Boot REST API](https://dzone.com/articles/json-web-token-how-to-secure-spring-boot-rest-api)
+* [Spring Boot Security + JWT Hello World Example](https://medium.com/swlh/spring-boot-security-jwt-hello-world-example-b479e457664c)

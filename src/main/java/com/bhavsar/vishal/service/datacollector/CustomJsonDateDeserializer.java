@@ -12,13 +12,13 @@ import java.text.SimpleDateFormat;
 
 public class CustomJsonDateDeserializer extends JsonDeserializer<Date> {
     @Override
-    public Date deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
-        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
-        String utilDate = jsonParser.getText();
+    public Date deserialize(final JsonParser jsonParser, final DeserializationContext deserializationContext) throws IOException {
+        final SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+        final String utilDate = jsonParser.getText();
         try {
-            java.util.Date uDate = format.parse(utilDate);
+            final java.util.Date uDate = format.parse(utilDate);
             return new Date(uDate.getTime());
-        } catch (ParseException e) {
+        } catch (final ParseException e) {
             throw new RuntimeException(e);
         }
     }

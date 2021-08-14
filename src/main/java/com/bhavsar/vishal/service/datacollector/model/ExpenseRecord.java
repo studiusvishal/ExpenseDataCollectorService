@@ -35,7 +35,7 @@ public class ExpenseRecord {
     private double expenseAmount;
 
     @JsonDeserialize(using = CustomJsonDateDeserializer.class)
-    public void setExpenseDate(Date expenseDate) {
+    public void setExpenseDate(final Date expenseDate) {
         this.expenseDate = expenseDate;
     }
 }
