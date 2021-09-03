@@ -1,4 +1,4 @@
-package com.bhavsar.vishal.service.datacollector;
+package com.bhavsar.vishal.service.datacollector.service.impl;
 
 import com.bhavsar.vishal.service.datacollector.model.login.User;
 import com.bhavsar.vishal.service.datacollector.repository.UserRepository;
