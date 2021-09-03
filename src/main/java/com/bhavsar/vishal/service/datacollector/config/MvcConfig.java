@@ -9,11 +9,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @Log4j2
 public class MvcConfig {
-//    @Bean
-//    public AuthenticationManager customAuthenticationManager() throws Exception {
-//        log.info("Initializing custom authentication manager...");
-//        return authenticationManager();
-//    }
 
     @Bean(name = "bcryptPasswordEncoder")
     public PasswordEncoder bCryptPasswordEncoder() {

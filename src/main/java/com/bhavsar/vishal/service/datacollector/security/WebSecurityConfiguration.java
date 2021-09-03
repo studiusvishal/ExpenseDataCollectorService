@@ -35,21 +35,20 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             "/swagger-ui.html",
             "/webjars/**"
     };
-//
-//    public WebSecurityConfiguration(final UserDetailsService userDetailsService,
-//                                    final PasswordEncoder bCryptPasswordEncoder) {
-//        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-//        this.userDetailsService = userDetailsService;
-//    }
 
     protected void configure(final HttpSecurity httpSecurity) throws Exception {
         httpSecurity.cors().and().csrf().disable().authorizeRequests()
-                .antMatchers(AUTH_WHITELIST).permitAll()
-                .antMatchers(HttpMethod.POST, "/users/signup").permitAll()
-                .anyRequest().authenticated()
-                .and().addFilter(new AuthenticationFilter(authenticationManager()))
+                .antMatchers(AUTH_WHITELIST)
+                .permitAll()
+                .antMatchers(HttpMethod.POST, "/users/signup")
+                .permitAll()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .addFilter(new AuthenticationFilter(authenticationManager()))
                 .addFilter(new AuthorizationFilter(authenticationManager()))
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     public void configure(final AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
