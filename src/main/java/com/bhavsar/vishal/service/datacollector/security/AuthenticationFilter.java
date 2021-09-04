@@ -2,9 +2,12 @@ package com.bhavsar.vishal.service.datacollector.security;
 
 import com.bhavsar.vishal.service.datacollector.model.login.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,6 +18,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,6 +44,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         }
     }
 
+    @SneakyThrows
     protected void successfulAuthentication(final HttpServletRequest request,
                                             final HttpServletResponse response,
                                             final FilterChain filterChain,
@@ -50,5 +55,12 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .signWith(SignatureAlgorithm.HS512, "SecretKeyToGenJWTs".getBytes())
                 .compact();
         response.addHeader("Authorization", "Bearer " + token);
+        response.setStatus(HttpServletResponse.SC_OK);
+        val gson = new Gson();
+        val userJsonString = gson.toJson(authentication.getPrincipal());
+        final PrintWriter writer = response.getWriter();
+        response.setContentType("application/json");
+        writer.println(userJsonString);
+        writer.flush();
     }
 }
