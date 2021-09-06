@@ -3,23 +3,16 @@ package com.bhavsar.vishal.service.datacollector.controller;
 import com.bhavsar.vishal.service.datacollector.model.CategoryRecord;
 import com.bhavsar.vishal.service.datacollector.model.CategoryResponse;
 import com.bhavsar.vishal.service.datacollector.model.ExpenseRecord;
+import com.bhavsar.vishal.service.datacollector.model.expense.ExpenseResponse;
 import com.bhavsar.vishal.service.datacollector.repository.CategoryRepository;
 import com.bhavsar.vishal.service.datacollector.repository.ExpenseRepository;
-
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +29,7 @@ public class ExpenseController {
 
     @RequestMapping(value = "/addExpenseCategory", method = RequestMethod.POST)
     public ResponseEntity<CategoryResponse> addExpenseCategory(@RequestBody final CategoryRecord categoryRecord) {
-        CategoryRecord record;
+        final CategoryRecord record;
         val response = CategoryResponse.builder();
         try {
             log.info("Saving new category with name '{}'", categoryRecord.getName());
@@ -81,11 +74,17 @@ public class ExpenseController {
     }
 
     @GetMapping("/getAllExpenseRecords")
-    public List<ExpenseRecord> getAllExpenseRecords() {
+    public ResponseEntity<ExpenseResponse> getAllExpenseRecords() {
         log.info("Getting all expense records...");
-        final List<ExpenseRecord> expenseRecordsList = expenseRepository.findAll();
-        log.debug("Records length: {}", expenseRecordsList.size());
-        return expenseRecordsList;
+        val expenseRecordsList = expenseRepository.findAll();
+        val size = expenseRecordsList.size();
+        log.debug("Records length: {}", size);
+        val expenseResponse = ExpenseResponse.builder()
+                .records(expenseRecordsList)
+                .size(size)
+                .message(size == 0 ? "No records found" : "")
+                .build();
+        return ResponseEntity.ok(expenseResponse);
     }
 
     @DeleteMapping(value = "/deleteExpenseRecord")
