@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class CategoryRecord {
     @Id
     @Column(name = "id", unique = true, nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
     @Column(nullable = false, unique = true)

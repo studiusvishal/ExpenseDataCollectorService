@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,27 +30,32 @@ public class ExpenseController {
 
     @RequestMapping(value = "/addExpenseCategory", method = RequestMethod.POST)
     public ResponseEntity<CategoryResponse> addExpenseCategory(@RequestBody final CategoryRecord categoryRecord) {
-        final CategoryRecord record;
-        val response = CategoryResponse.builder();
         try {
             log.info("Saving new category with name '{}'", categoryRecord.getName());
-            record = categoryRepository.save(categoryRecord);
-            response.record(record).msg("Expense category saved successfully.");
+            val record = categoryRepository.save(categoryRecord);
+            val response = CategoryResponse.builder()
+                    .records(Collections.singletonList(record))
+                    .msg("Expense category saved successfully.")
+                    .size(1)
+                    .build();
             log.info("New category added with id={}", record.getId());
+            return ResponseEntity.ok(response);
         } catch (final DataIntegrityViolationException e) {
             val msg = String.format("Expense category '%s' already exists.", categoryRecord.getName());
-            log.error(msg, e);
-            response.msg(msg);
+            throw new DataIntegrityViolationException(msg);
         }
-        return ResponseEntity.ok(response.build());
     }
 
     @RequestMapping(value = "/getAllExpenseCategories", method = RequestMethod.GET)
-    public ResponseEntity<List<CategoryRecord>> getAllExpenseCategories() {
+    public ResponseEntity<CategoryResponse> getAllExpenseCategories() {
         log.info("Getting all categories...");
         val records = categoryRepository.findAll(Sort.by(Sort.Order.asc("name")));
         log.debug("Category size = {}", records.size());
-        return ResponseEntity.ok(records);
+        val response = CategoryResponse.builder()
+                .records(records)
+                .size(records.size())
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     @RequestMapping(value = "/saveExpenseRecord", method = RequestMethod.POST)
