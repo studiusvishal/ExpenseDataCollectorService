@@ -34,6 +34,9 @@ public class ExpenseRecord {
     @Column
     private double expenseAmount;
 
+    @Column(columnDefinition = "boolean default false")
+    private boolean deleted;
+
     @JsonDeserialize(using = CustomJsonDateDeserializer.class)
     public void setExpenseDate(final Date expenseDate) {
         this.expenseDate = expenseDate;
