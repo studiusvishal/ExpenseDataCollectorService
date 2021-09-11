@@ -1,5 +1,6 @@
 package com.bhavsar.vishal.service.datacollector.security;
 
+import com.bhavsar.vishal.service.datacollector.model.login.LoginResponse;
 import com.bhavsar.vishal.service.datacollector.model.login.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -49,15 +50,22 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                                             final HttpServletResponse response,
                                             final FilterChain filterChain,
                                             final Authentication authentication) {
+        val username = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
         final String token = Jwts.builder()
-                .setSubject(((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername())
+                .setSubject(username)
                 .setExpiration(Date.from(ZonedDateTime.now().plusHours(1).toInstant()))
                 .signWith(SignatureAlgorithm.HS512, "SecretKeyToGenJWTs".getBytes())
                 .compact();
-        response.addHeader("Authorization", "Bearer " + token);
+        val authToken = "Bearer " + token;
+        response.addHeader("Authorization", authToken);
         response.setStatus(HttpServletResponse.SC_OK);
+        val loginResponse = LoginResponse.builder()
+                .isLoginSuccessful(true)
+                .username(username)
+                .authToken(authToken)
+                .status(HttpServletResponse.SC_OK);
         val gson = new Gson();
-        val userJsonString = gson.toJson(authentication.getPrincipal());
+        val userJsonString = gson.toJson(loginResponse);
         final PrintWriter writer = response.getWriter();
         response.setContentType("application/json");
         writer.println(userJsonString);
