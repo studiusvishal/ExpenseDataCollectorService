@@ -1,8 +1,9 @@
-package com.bhavsar.vishal.service.datacollector.security.services;
+package com.bhavsar.vishal.service.datacollector.security.services.impl;
 
 import com.bhavsar.vishal.service.datacollector.model.login.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,6 +13,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Builder
 @Data
 @AllArgsConstructor
 public class UserDetailsImpl implements UserDetails {
@@ -21,18 +23,24 @@ public class UserDetailsImpl implements UserDetails {
     @JsonIgnore
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
+    private boolean enabled;
+    private boolean isUsing2FA;
+    private String name;
 
-    public static UserDetailsImpl build(User user) {
-        List<GrantedAuthority> authorities = user.getRoles().stream()
+    public static UserDetailsImpl build(final User user) {
+        final List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toList());
-
-        return new UserDetailsImpl(
-                user.getId(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getPassword(),
-                authorities);
+        return UserDetailsImpl.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .email(user.getEmail())
+                .authorities(authorities)
+                .name(user.getFirstName()+" "+ user.getLastName())
+                .isUsing2FA(user.isUsing2FA())
+                .enabled(user.isEnabled())
+                .build();
     }
 
     @Override
@@ -67,6 +75,6 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return enabled;
     }
 }

@@ -37,3 +37,7 @@ The following guides illustrate how to use some features concretely:
 * [Building REST services with Spring](https://spring.io/guides/tutorials/bookmarks/)
 * [Json Web Token: How to Secure a Spring Boot REST API](https://dzone.com/articles/json-web-token-how-to-secure-spring-boot-rest-api)
 * [Spring Boot Security + JWT Hello World Example](https://medium.com/swlh/spring-boot-security-jwt-hello-world-example-b479e457664c)
+
+## Used in this service
+* [Spring login security example used in this service](https://www.bezkoder.com/spring-boot-jwt-authentication/)
+* [Custom error messages in REST API](https://www.baeldung.com/global-error-handler-in-a-spring-rest-api)

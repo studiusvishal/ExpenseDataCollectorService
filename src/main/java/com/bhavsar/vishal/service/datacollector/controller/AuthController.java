@@ -1,132 +1,135 @@
 package com.bhavsar.vishal.service.datacollector.controller;
 
+import com.bhavsar.vishal.service.datacollector.events.OnRegistrationCompleteEvent;
 import com.bhavsar.vishal.service.datacollector.model.login.ERole;
 import com.bhavsar.vishal.service.datacollector.model.login.Role;
 import com.bhavsar.vishal.service.datacollector.model.login.User;
 import com.bhavsar.vishal.service.datacollector.payload.request.LoginRequest;
 import com.bhavsar.vishal.service.datacollector.payload.request.SignUpRequest;
-import com.bhavsar.vishal.service.datacollector.payload.response.JwtResponse;
 import com.bhavsar.vishal.service.datacollector.payload.response.MessageResponse;
-import com.bhavsar.vishal.service.datacollector.repository.RoleRepository;
-import com.bhavsar.vishal.service.datacollector.repository.UserNewRepository;
 import com.bhavsar.vishal.service.datacollector.security.jwt.JwtUtils;
-import com.bhavsar.vishal.service.datacollector.security.services.UserDetailsImpl;
-import lombok.val;
+import com.bhavsar.vishal.service.datacollector.security.services.RoleService;
+import com.bhavsar.vishal.service.datacollector.security.services.TokenService;
+import com.bhavsar.vishal.service.datacollector.security.services.UserService;
+import com.bhavsar.vishal.service.datacollector.util.AuthUtils;
+import lombok.extern.log4j.Log4j2;
+import org.jboss.aerogear.security.otp.api.Base32;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
+@Log4j2
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
     @Autowired
-    AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
 
     @Autowired
-    UserNewRepository userRepository;
+    private UserService userService;
 
     @Autowired
-    RoleRepository roleRepository;
+    private JwtUtils jwtUtils;
 
     @Autowired
-    PasswordEncoder encoder;
+    private ApplicationEventPublisher eventPublisher;
 
     @Autowired
-    JwtUtils jwtUtils;
+    private MessageSource messages;
+
+    @Autowired
+    private TokenService tokenService;
+
+    @Autowired
+    private AuthUtils authUtils;
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody final LoginRequest loginRequest) {
+        final var authenticationToken = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
+        final var authentication = authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
-
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
-
-        val jwtResponse = JwtResponse.builder()
-                .token(jwt)
-                .id(userDetails.getId())
-                .username(userDetails.getUsername())
-                .email(userDetails.getEmail())
-                .roles(roles)
-                .build();
+        final var jwtResponse = jwtUtils.createResponse(authentication);
         return ResponseEntity.ok(jwtResponse);
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody final SignUpRequest signUpRequest,
+                                          final HttpServletRequest request) {
+        if (userService.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Username is already taken!"));
         }
-
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+        if (userService.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Email is already in use!"));
         }
 
         // Create new user's account
-//        User user = new User(signUpRequest.getUsername(),
-//                signUpRequest.getEmail(),
-//                encoder.encode(signUpRequest.getPassword()));
+        final var user = authUtils.createUser(signUpRequest);
+        userService.save(user);
+        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, request.getLocale(), getAppUrl(request)));
+        final String msg = messages.getMessage("message.registration.success", null, request.getLocale());
+        return ResponseEntity.ok(new MessageResponse(msg));
+    }
 
-        User user = User.builder()
-                .username(signUpRequest.getUsername())
-                .email(signUpRequest.getEmail())
-                .password(encoder.encode(signUpRequest.getUsername()))
-                .build();
-        Set<String> strRoles = signUpRequest.getRole();
-        Set<Role> roles = new HashSet<>();
-
-        if (strRoles == null) {
-            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
-        } else {
-            strRoles.forEach(role -> {
-                switch (role) {
-                    case "admin":
-                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(adminRole);
-
-                        break;
-                    case "mod":
-                        Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(modRole);
-
-                        break;
-                    default:
-                        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(userRole);
-                }
-            });
+    @GetMapping("/confirmRegistration")
+    public MessageResponse confirmRegistration(final HttpServletRequest request,
+                                               final RedirectAttributes redirectAttributes,
+                                               @RequestParam("token") final String token) {
+        final var locale = request.getLocale();
+        // validate the token which was generated during registration and sent in the email
+        final var tokenValidityStatus = userService.validateVerificationToken(token);
+        final var messageResponseBuilder = MessageResponse.builder();
+        switch (tokenValidityStatus) {
+            case TOKEN_VALID:
+                final var user = userService.getUserFromVerificationToken(token);
+                userService.enableUser(user.getUsername());
+                tokenService.delete(token);
+                messageResponseBuilder.message("User verification completed. User is enabled. You can proceed to login in the app.");
+// if user has not opted for OTP, then once he clicks on email, activate his account.
+//                TODO: Revisit when working on MFA
+//                if (user.isUsing2FA()) {
+//                    String qrUrl = userService.generateQRUrl(user);
+//                    log.debug("QR URL: {}", qrUrl);
+//                    redirectAttributes.addAttribute("qr_code", qrUrl);
+//                    redirectAttributes.addAttribute("user", user.getUsername());
+//                    redirectUrl = "redirect:/qrcode";
+//                } else {
+//                    // if user has not opted for OTP, then once he clicks on email, activate his account.
+//                    userService.enableUser(user.getUsername());
+//                    return "redirect:/registrationComplete";
+//                }
+                break;
+            case TOKEN_EXPIRED:
+            case TOKEN_INVALID:
+//                redirectAttributes.addAttribute("message", messages.getMessage("auth.message.authtoken." + tokenValidityStatus.getTokenStatus(), null, locale));
+//                redirectAttributes.addAttribute("expired", tokenValidityStatus);
+//                redirectAttributes.addAttribute("token", token);
+                messageResponseBuilder.message("User verification failed. Token is " + tokenValidityStatus.getTokenStatus());
+                // TODO: Add feature to resend verification token email.
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + tokenValidityStatus);
         }
+        return messageResponseBuilder.build();
+    }
 
-        user.setRoles(roles);
-        userRepository.save(user);
-
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    private String getAppUrl(final HttpServletRequest request) {
+        return String.format("http://%s:%s/api/auth%s", request.getServerName(), request.getServerPort(), request.getContextPath());
     }
 }
