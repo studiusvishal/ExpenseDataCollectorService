@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -18,7 +19,7 @@ import java.util.Optional;
 
 @Log4j2
 @RestController
-@RequestMapping(value = "/expense")
+@RequestMapping(value = "/api/expense")
 public class ExpenseController {
     @Autowired
     private CategoryRepository categoryRepository;
@@ -26,7 +27,8 @@ public class ExpenseController {
     @Autowired
     private ExpenseRepository expenseRepository;
 
-    @RequestMapping(value = "/addExpenseCategory", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PostMapping(value = "/addExpenseCategory")
     public ResponseEntity<CategoryResponse> addExpenseCategory(@RequestBody final CategoryRecord categoryRecord) {
         try {
             log.info("Saving new category with name '{}'", categoryRecord.getName());
