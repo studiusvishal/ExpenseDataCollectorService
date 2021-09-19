@@ -1,11 +1,9 @@
 package com.bhavsar.vishal.service.datacollector.model.login;
 
-import com.bhavsar.vishal.service.datacollector.payload.request.SignUpRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.jboss.aerogear.security.otp.api.Base32;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;

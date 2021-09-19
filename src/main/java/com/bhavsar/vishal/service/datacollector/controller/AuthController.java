@@ -1,19 +1,14 @@
 package com.bhavsar.vishal.service.datacollector.controller;
 
 import com.bhavsar.vishal.service.datacollector.events.OnRegistrationCompleteEvent;
-import com.bhavsar.vishal.service.datacollector.model.login.ERole;
-import com.bhavsar.vishal.service.datacollector.model.login.Role;
-import com.bhavsar.vishal.service.datacollector.model.login.User;
 import com.bhavsar.vishal.service.datacollector.payload.request.LoginRequest;
 import com.bhavsar.vishal.service.datacollector.payload.request.SignUpRequest;
 import com.bhavsar.vishal.service.datacollector.payload.response.MessageResponse;
 import com.bhavsar.vishal.service.datacollector.security.jwt.JwtUtils;
-import com.bhavsar.vishal.service.datacollector.security.services.RoleService;
 import com.bhavsar.vishal.service.datacollector.security.services.TokenService;
 import com.bhavsar.vishal.service.datacollector.security.services.UserService;
 import com.bhavsar.vishal.service.datacollector.util.AuthUtils;
 import lombok.extern.log4j.Log4j2;
-import org.jboss.aerogear.security.otp.api.Base32;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
@@ -21,14 +16,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.HashSet;
-import java.util.Set;
 
 @Log4j2
 @CrossOrigin(origins = "*", maxAge = 3600)
