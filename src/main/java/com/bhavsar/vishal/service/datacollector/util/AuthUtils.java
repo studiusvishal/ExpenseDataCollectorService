@@ -25,8 +25,7 @@ public class AuthUtils {
 
     public User createUser(final SignUpRequest signUpRequest) {
         return User.builder()
-                .firstName(signUpRequest.getFirstName())
-                .lastName(signUpRequest.getLastName())
+                .name(signUpRequest.getName())
                 .username(signUpRequest.getUsername())
                 .password(passwordEncoder.encode(signUpRequest.getPassword()))
                 .email(signUpRequest.getEmail())

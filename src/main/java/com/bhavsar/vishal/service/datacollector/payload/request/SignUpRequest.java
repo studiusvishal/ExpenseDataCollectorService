@@ -12,12 +12,7 @@ import java.util.Set;
 @Builder
 public class SignUpRequest {
     @NotBlank
-    private String firstName;
-
-    @NotBlank
-    private String lastName;
-
-    private boolean using2FA;
+    private String name;
 
     @NotBlank
     @Size(min = 3, max = 20, message = "Username '${validatedValue}' must be between {min} to {max} characters long.")
@@ -28,9 +23,10 @@ public class SignUpRequest {
     @Email
     private String email;
 
-    private Set<String> roles;
-
     @NotBlank
     @Size(min = 6, max = 40)
     private String password;
+
+    private boolean using2FA;
+    private Set<String> roles;
 }

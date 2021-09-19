@@ -29,10 +29,7 @@ public class User implements Serializable {
     private Long id;
 
     @NotBlank
-    private String firstName;
-
-    @NotBlank
-    private String lastName;
+    private String name;
 
     @NotBlank
     @Size(max = 20)

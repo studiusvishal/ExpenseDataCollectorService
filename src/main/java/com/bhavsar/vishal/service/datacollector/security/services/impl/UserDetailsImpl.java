@@ -37,7 +37,7 @@ public class UserDetailsImpl implements UserDetails {
                 .password(user.getPassword())
                 .email(user.getEmail())
                 .authorities(authorities)
-                .name(user.getFirstName()+" "+ user.getLastName())
+                .name(user.getName())
                 .isUsing2FA(user.isUsing2FA())
                 .enabled(user.isEnabled())
                 .build();
