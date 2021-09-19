@@ -53,8 +53,8 @@ public class AuthController {
         final var authenticationToken = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
         final var authentication = authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        final var jwtResponse = jwtUtils.createResponse(authentication);
-        return ResponseEntity.ok(jwtResponse);
+        final var loginResponse = jwtUtils.createResponse(authentication);
+        return ResponseEntity.ok(loginResponse);
     }
 
     @PostMapping("/signup")

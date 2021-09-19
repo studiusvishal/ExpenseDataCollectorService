@@ -21,7 +21,7 @@ public class JwtUtils {
     @Value("${money.tracker.service.jwtExpirationMs}")
     private int jwtExpirationMs;
 
-    public String generateJwtToken(final Authentication authentication) {
+    private String generateJwtToken(final Authentication authentication) {
         final UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
         return Jwts.builder()
                 .setSubject((userPrincipal.getUsername()))
