@@ -1,5 +1,6 @@
 package com.bhavsar.vishal.service.datacollector.payload.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,6 +13,7 @@ import java.util.Set;
 @Builder
 public class SignUpRequest {
     @NotBlank
+    @JsonProperty("fullName")
     private String name;
 
     @NotBlank
