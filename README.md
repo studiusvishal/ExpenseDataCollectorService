@@ -5,6 +5,15 @@
 * Install pgadmin GUI tool to connect to postgresql server
 * Create new user to access postgresql server
 
+## Running from command line
+```
+mvn spring-boot:run \
+-Dspring-boot.run.jvmArguments="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"
+
+mvn spring-boot:run \
+-Dspring-boot.run.jvmArguments="-DMAIL_APP_PASSWORD=tzzixtccfieolmwd"
+```
+
 * Install postman windows app
 * Register new user - 
   * http://localhost:8080/users/signup
