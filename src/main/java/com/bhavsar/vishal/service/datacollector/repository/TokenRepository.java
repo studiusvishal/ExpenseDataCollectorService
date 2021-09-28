@@ -1,6 +1,6 @@
 package com.bhavsar.vishal.service.datacollector.repository;
 
-import com.bhavsar.vishal.service.datacollector.model.login.mfa.VerificationToken;
+import com.bhavsar.vishal.service.datacollector.payload.response.auth.VerificationToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

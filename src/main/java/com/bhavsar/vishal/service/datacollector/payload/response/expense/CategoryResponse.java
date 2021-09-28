@@ -1,5 +1,6 @@
-package com.bhavsar.vishal.service.datacollector.model;
+package com.bhavsar.vishal.service.datacollector.payload.response.expense;
 
+import com.bhavsar.vishal.service.datacollector.db.entity.expense.CategoryRecord;
 import lombok.Builder;
 import lombok.Data;
 

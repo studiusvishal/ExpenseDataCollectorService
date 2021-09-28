@@ -1,5 +1,6 @@
-package com.bhavsar.vishal.service.datacollector.model.login;
+package com.bhavsar.vishal.service.datacollector.db.entity.user;
 
+import com.bhavsar.vishal.service.datacollector.model.login.ERole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

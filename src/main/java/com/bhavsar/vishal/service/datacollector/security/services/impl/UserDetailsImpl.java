@@ -1,6 +1,6 @@
 package com.bhavsar.vishal.service.datacollector.security.services.impl;
 
-import com.bhavsar.vishal.service.datacollector.model.login.User;
+import com.bhavsar.vishal.service.datacollector.db.entity.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

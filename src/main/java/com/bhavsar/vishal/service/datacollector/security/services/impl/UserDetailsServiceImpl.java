@@ -1,8 +1,8 @@
 package com.bhavsar.vishal.service.datacollector.security.services.impl;
 
+import com.bhavsar.vishal.service.datacollector.db.entity.user.User;
 import com.bhavsar.vishal.service.datacollector.model.login.TokenValidityStatus;
-import com.bhavsar.vishal.service.datacollector.model.login.User;
-import com.bhavsar.vishal.service.datacollector.model.login.mfa.VerificationToken;
+import com.bhavsar.vishal.service.datacollector.payload.response.auth.VerificationToken;
 import com.bhavsar.vishal.service.datacollector.repository.TokenRepository;
 import com.bhavsar.vishal.service.datacollector.repository.UserRepository;
 import com.bhavsar.vishal.service.datacollector.security.services.UserService;
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 import static com.bhavsar.vishal.service.datacollector.model.login.TokenValidityStatus.*;
 
@@ -60,8 +61,13 @@ public class UserDetailsServiceImpl implements UserService {
     }
 
     @Override
-    public void save(final User user) {
-        userRepository.save(user);
+    public User save(final User user) {
+        return userRepository.save(user);
+    }
+
+    @Override
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
     @Override

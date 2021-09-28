@@ -1,7 +1,7 @@
 package com.bhavsar.vishal.service.datacollector.security.services.impl;
 
+import com.bhavsar.vishal.service.datacollector.db.entity.user.Role;
 import com.bhavsar.vishal.service.datacollector.model.login.ERole;
-import com.bhavsar.vishal.service.datacollector.model.login.Role;
 import com.bhavsar.vishal.service.datacollector.repository.RoleRepository;
 import com.bhavsar.vishal.service.datacollector.security.services.RoleService;
 import lombok.extern.log4j.Log4j2;

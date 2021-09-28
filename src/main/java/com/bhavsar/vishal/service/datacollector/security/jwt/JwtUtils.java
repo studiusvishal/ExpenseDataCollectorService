@@ -1,6 +1,6 @@
 package com.bhavsar.vishal.service.datacollector.security.jwt;
 
-import com.bhavsar.vishal.service.datacollector.payload.response.LoginResponse;
+import com.bhavsar.vishal.service.datacollector.payload.response.auth.LoginResponse;
 import com.bhavsar.vishal.service.datacollector.security.services.impl.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import lombok.extern.log4j.Log4j2;

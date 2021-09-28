@@ -26,8 +26,8 @@ public class PropertyLogger {
     @EventListener
     public void handleContextRefresh(final ContextRefreshedEvent event) {
         // final Environment env = event.getApplicationContext().getEnvironment();
-        log.info("====== Environment and configuration ======");
-        log.info("Active profiles: {}", Arrays.toString(env.getActiveProfiles()));
+        log.debug("====== Environment and configuration ======");
+        log.debug("Active profiles: {}", Arrays.toString(env.getActiveProfiles()));
         final var sources = ((AbstractEnvironment) env).getPropertySources();
         StreamSupport.stream(sources.spliterator(), false)
                 .filter(ps -> ps instanceof EnumerablePropertySource)
@@ -35,7 +35,7 @@ public class PropertyLogger {
                 .flatMap(Arrays::stream)
                 .distinct()
                 .sorted()
-                .forEach(prop -> log.info("{}: {}", prop, env.getProperty(prop)));
-        log.info("===========================================");
+                .forEach(prop -> log.debug("{}: {}", prop, env.getProperty(prop)));
+        log.debug("===========================================");
     }
 }

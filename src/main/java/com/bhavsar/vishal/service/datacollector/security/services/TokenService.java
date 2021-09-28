@@ -1,6 +1,6 @@
 package com.bhavsar.vishal.service.datacollector.security.services;
 
-import com.bhavsar.vishal.service.datacollector.model.login.User;
+import com.bhavsar.vishal.service.datacollector.db.entity.user.User;
 
 public interface TokenService {
     boolean isCodeValid(String username, String code);

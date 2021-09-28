@@ -1,7 +1,7 @@
 package com.bhavsar.vishal.service.datacollector.events.listeners;
 
+import com.bhavsar.vishal.service.datacollector.db.entity.user.User;
 import com.bhavsar.vishal.service.datacollector.events.OnRegistrationCompleteEvent;
-import com.bhavsar.vishal.service.datacollector.model.login.User;
 import com.bhavsar.vishal.service.datacollector.security.services.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;

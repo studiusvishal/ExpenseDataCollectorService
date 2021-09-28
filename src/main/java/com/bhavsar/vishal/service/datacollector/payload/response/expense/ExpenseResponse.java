@@ -1,6 +1,6 @@
-package com.bhavsar.vishal.service.datacollector.model.expense;
+package com.bhavsar.vishal.service.datacollector.payload.response.expense;
 
-import com.bhavsar.vishal.service.datacollector.model.ExpenseRecord;
+import com.bhavsar.vishal.service.datacollector.db.entity.expense.ExpenseRecord;
 import lombok.Builder;
 import lombok.Data;
 

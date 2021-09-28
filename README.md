@@ -50,3 +50,10 @@ The following guides illustrate how to use some features concretely:
 ## Used in this service
 * [Spring login security example used in this service](https://www.bezkoder.com/spring-boot-jwt-authentication/)
 * [Custom error messages in REST API](https://www.baeldung.com/global-error-handler-in-a-spring-rest-api)
+
+## Useful info
+* Drop all tables
+```
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
+```

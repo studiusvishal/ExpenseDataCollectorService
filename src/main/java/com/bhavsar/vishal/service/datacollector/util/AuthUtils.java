@@ -1,9 +1,9 @@
 package com.bhavsar.vishal.service.datacollector.util;
 
+import com.bhavsar.vishal.service.datacollector.db.entity.user.Role;
+import com.bhavsar.vishal.service.datacollector.db.entity.user.User;
 import com.bhavsar.vishal.service.datacollector.model.login.ERole;
-import com.bhavsar.vishal.service.datacollector.model.login.Role;
-import com.bhavsar.vishal.service.datacollector.model.login.User;
-import com.bhavsar.vishal.service.datacollector.payload.request.SignUpRequest;
+import com.bhavsar.vishal.service.datacollector.payload.request.auth.SignUpRequest;
 import com.bhavsar.vishal.service.datacollector.security.services.RoleService;
 import lombok.extern.log4j.Log4j2;
 import org.jboss.aerogear.security.otp.api.Base32;

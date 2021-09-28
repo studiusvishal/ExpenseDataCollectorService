@@ -1,9 +1,9 @@
 package com.bhavsar.vishal.service.datacollector.controller;
 
 import com.bhavsar.vishal.service.datacollector.events.OnRegistrationCompleteEvent;
-import com.bhavsar.vishal.service.datacollector.payload.request.LoginRequest;
-import com.bhavsar.vishal.service.datacollector.payload.request.SignUpRequest;
-import com.bhavsar.vishal.service.datacollector.payload.response.MessageResponse;
+import com.bhavsar.vishal.service.datacollector.payload.request.auth.LoginRequest;
+import com.bhavsar.vishal.service.datacollector.payload.request.auth.SignUpRequest;
+import com.bhavsar.vishal.service.datacollector.payload.response.auth.MessageResponse;
 import com.bhavsar.vishal.service.datacollector.security.jwt.JwtUtils;
 import com.bhavsar.vishal.service.datacollector.security.services.TokenService;
 import com.bhavsar.vishal.service.datacollector.security.services.UserService;

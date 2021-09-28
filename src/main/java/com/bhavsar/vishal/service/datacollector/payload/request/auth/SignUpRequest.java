@@ -1,4 +1,4 @@
-package com.bhavsar.vishal.service.datacollector.payload.request;
+package com.bhavsar.vishal.service.datacollector.payload.request.auth;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;

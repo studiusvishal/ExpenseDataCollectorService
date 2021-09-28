@@ -1,6 +1,6 @@
 package com.bhavsar.vishal.service.datacollector.events;
 
-import com.bhavsar.vishal.service.datacollector.model.login.User;
+import com.bhavsar.vishal.service.datacollector.db.entity.user.User;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 

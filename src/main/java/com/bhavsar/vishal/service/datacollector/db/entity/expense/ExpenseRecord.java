@@ -1,11 +1,9 @@
-package com.bhavsar.vishal.service.datacollector.model;
+package com.bhavsar.vishal.service.datacollector.db.entity.expense;
 
 import com.bhavsar.vishal.service.datacollector.CustomJsonDateDeserializer;
+import com.bhavsar.vishal.service.datacollector.db.entity.user.User;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -18,18 +16,14 @@ import java.util.Date;
 @Entity
 public class ExpenseRecord {
     @Id
-    @Column(name = "id", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long expenseId;
 
     @Column
     private Date expenseDate;
 
     @Column(name = "description", length = 180)
     private String description;
-
-    @Column
-    private String category;
 
     @Column
     private double expenseAmount;
@@ -41,4 +35,14 @@ public class ExpenseRecord {
     public void setExpenseDate(final Date expenseDate) {
         this.expenseDate = expenseDate;
     }
+
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private CategoryRecord categoryRecord;
 }

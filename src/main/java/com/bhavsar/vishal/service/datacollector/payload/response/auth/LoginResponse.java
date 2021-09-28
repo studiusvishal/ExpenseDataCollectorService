@@ -1,4 +1,4 @@
-package com.bhavsar.vishal.service.datacollector.payload.response;
+package com.bhavsar.vishal.service.datacollector.payload.response.auth;
 
 import lombok.Builder;
 import lombok.Data;

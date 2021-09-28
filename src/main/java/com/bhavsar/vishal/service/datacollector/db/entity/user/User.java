@@ -1,5 +1,7 @@
-package com.bhavsar.vishal.service.datacollector.model.login;
+package com.bhavsar.vishal.service.datacollector.db.entity.user;
 
+import com.bhavsar.vishal.service.datacollector.db.entity.expense.CategoryRecord;
+import com.bhavsar.vishal.service.datacollector.db.entity.expense.ExpenseRecord;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -54,4 +56,11 @@ public class User implements Serializable {
     private boolean using2FA;
     private boolean enabled;
     private String secret;
+
+    // Value of mappedBy attribute should match with the field name of User in ExpenseRecord
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ExpenseRecord> expenseRecords;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<CategoryRecord> categoryRecords;
 }

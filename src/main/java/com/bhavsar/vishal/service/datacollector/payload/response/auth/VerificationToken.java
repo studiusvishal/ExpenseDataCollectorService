@@ -1,6 +1,6 @@
-package com.bhavsar.vishal.service.datacollector.model.login.mfa;
+package com.bhavsar.vishal.service.datacollector.payload.response.auth;
 
-import com.bhavsar.vishal.service.datacollector.model.login.User;
+import com.bhavsar.vishal.service.datacollector.db.entity.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

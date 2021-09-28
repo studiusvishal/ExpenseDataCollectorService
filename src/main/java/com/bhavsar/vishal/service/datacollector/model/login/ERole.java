@@ -7,7 +7,7 @@ public enum ERole {
     ROLE_MODERATOR("mod"),
     ROLE_ADMIN("admin");
 
-    private String name;
+    private final String name;
 
     ERole(final String name) {
         this.name = name;
